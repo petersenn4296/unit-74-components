@@ -3,12 +3,12 @@ import React, { Component } from 'react';
 
 class AddItem extends Component {
 
-  // constructor(props) {
-  //   super(props)
-  //   this.state = {
-  //
-  //   }
-  // }
+  constructor(props) {
+    super(props)
+    this.state = {
+
+    }
+  }
 
 
   onSubmit = (e) =>{

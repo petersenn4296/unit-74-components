@@ -39,8 +39,14 @@ class App extends Component {
 
   handleSubmit = (oneCartItem) => {
     const oneItem = this.state.products.filter(item => item.name === oneCartItem.product)[0]
-    
-    let newItem = {
+    const checkExist = this.state.cartItems.filter(item => item.product.name === oneItem.name)
+
+    if(checkExist.length === 1) {
+      let mom = parseInt(checkExist[0].quantity, 10) + parseInt(oneCartItem.quantity, 10)
+      checkExist[0].quantity = mom
+      this.setState({cartItems: this.state.cartItems})
+    } else {
+        let newItem = {
             product: {
                 id: oneItem.id,
                 name: oneItem.name,
@@ -51,6 +57,7 @@ class App extends Component {
           this.setState({
             cartItems: [...this.state.cartItems, newItem]
           })
+        }
   }
 
 
