@@ -22,6 +22,9 @@ class AddItem extends Component {
 
   render() {
     return (
+    //   <div>
+    //   <Total/>
+    // </div>
       <form className='container' onSubmit={this.onSubmit}>
 
         <p>

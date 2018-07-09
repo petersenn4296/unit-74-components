@@ -4,6 +4,7 @@ import CartFooter from './cartFooter'
 import CartItems from './cartItems'
 import CartItem from './cartItem'
 import AddItem from './addItem'
+import Total from './total'
 
 const cartItemsList = [
   { id: 1, product: { id: 40, name: 'Mediocre Iron Watch', priceInCents: 399 }, quantity: 1 },
@@ -12,15 +13,15 @@ const cartItemsList = [
 ]
 
 const products = [
-  { id: 40, name: 'Mediocre Iron Watch', priceInCents: 399 },
-  { id: 41, name: 'Heavy Duty Concrete Plate', priceInCents: 499 },
-  { id: 42, name: 'Intelligent Paper Knife', priceInCents: 1999 },
-  { id: 43, name: 'Small Aluminum Keyboard', priceInCents: 2500 },
-  { id: 44, name: 'Practical Copper Plate', priceInCents: 1000 },
-  { id: 45, name: 'Awesome Bronze Pants', priceInCents: 399 },
-  { id: 46, name: 'Intelligent Leather Clock', priceInCents: 2999 },
-  { id: 47, name: 'Ergonomic Bronze Lamp', priceInCents: 40000 },
-  { id: 48, name: 'Awesome Leather Shoes', priceInCents: 3990 },
+  { id: 40, name: 'Mediocre Iron Watch', priceInCents: 3.99 },
+  { id: 41, name: 'Heavy Duty Concrete Plate', priceInCents: 4.99 },
+  { id: 42, name: 'Intelligent Paper Knife', priceInCents: 19.99 },
+  { id: 43, name: 'Small Aluminum Keyboard', priceInCents: 25.00 },
+  { id: 44, name: 'Practical Copper Plate', priceInCents: 10.00 },
+  { id: 45, name: 'Awesome Bronze Pants', priceInCents: 3.99 },
+  { id: 46, name: 'Intelligent Leather Clock', priceInCents: 29.99 },
+  { id: 47, name: 'Ergonomic Bronze Lamp', priceInCents: 400.00 },
+  { id: 48, name: 'Awesome Leather Shoes', priceInCents: 39.90 },
 ]
 
 class App extends Component {
@@ -40,11 +41,16 @@ class App extends Component {
   handleSubmit = (oneCartItem) => {
     const oneItem = this.state.products.filter(item => item.name === oneCartItem.product)[0]
     const checkExist = this.state.cartItems.filter(item => item.product.name === oneItem.name)
+    let qty = parseInt(oneCartItem.quantity)
+    let price = oneItem.priceInCents
 
     if(checkExist.length === 1) {
       let mom = parseInt(checkExist[0].quantity, 10) + parseInt(oneCartItem.quantity, 10)
       checkExist[0].quantity = mom
-      this.setState({cartItems: this.state.cartItems})
+      this.setState({
+        cartItems: this.state.cartItems,
+        total: qty * price + this.state.total
+      })
     } else {
         let newItem = {
             product: {
@@ -55,7 +61,8 @@ class App extends Component {
             quantity: oneCartItem.quantity
           }
           this.setState({
-            cartItems: [...this.state.cartItems, newItem]
+            cartItems: [...this.state.cartItems, newItem],
+            total: qty * price + this.state.total
           })
         }
   }
@@ -67,6 +74,10 @@ class App extends Component {
         <CartHeader/>
         <CartItems
           list={this.state.cartItems}
+        />
+        <Total
+          list={this.state.cartItems}
+          total={this.state.total}
         />
         <AddItem
           products={products}

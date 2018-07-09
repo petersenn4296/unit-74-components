@@ -14,7 +14,14 @@ class CartItems extends Component {
             <div className="col-md-2">Quantity</div>
           </div>
         </div>
-        {this.props.list.map(item => <CartItem key={item.product.id} product={item.product} price={item.price} quantity={item.quantity}/>)}
+        {this.props.list.map(item =>
+          <CartItem
+            key={item.product.id}
+            product={item.product}
+            price={item.price}
+            quantity={item.quantity}
+          />
+        )}
       </div>
     </div>
     );
