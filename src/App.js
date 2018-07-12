@@ -6,31 +6,13 @@ import CartItem from './cartItem'
 import AddItem from './addItem'
 import Total from './total'
 
-const cartItemsList = [
-  { id: 1, product: { id: 40, name: 'Mediocre Iron Watch', priceInCents: 399 }, quantity: 1 },
-  { id: 2, product: { id: 41, name: 'Heavy Duty Concrete Plate', priceInCents: 499 }, quantity: 2 },
-  { id: 3, product: { id: 42, name: 'Intelligent Paper Knife', priceInCents: 1999 }, quantity: 1 },
-]
-
-const products = [
-  { id: 40, name: 'Mediocre Iron Watch', priceInCents: 3.99 },
-  { id: 41, name: 'Heavy Duty Concrete Plate', priceInCents: 4.99 },
-  { id: 42, name: 'Intelligent Paper Knife', priceInCents: 19.99 },
-  { id: 43, name: 'Small Aluminum Keyboard', priceInCents: 25.00 },
-  { id: 44, name: 'Practical Copper Plate', priceInCents: 10.00 },
-  { id: 45, name: 'Awesome Bronze Pants', priceInCents: 3.99 },
-  { id: 46, name: 'Intelligent Leather Clock', priceInCents: 29.99 },
-  { id: 47, name: 'Ergonomic Bronze Lamp', priceInCents: 400.00 },
-  { id: 48, name: 'Awesome Leather Shoes', priceInCents: 39.90 },
-]
-
 class App extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      list: cartItemsList,
-      products: products,
+      list: [],
+      products: [],
       cartItems: [],
       quantity: 0,
       name: '',
@@ -38,15 +20,22 @@ class App extends Component {
     }
   }
 
+  async componentDidMount() {
+    const response = await fetch('http://localhost:8082/api/products')
+    const json = await response.json()
+    this.setState({products: json})
+  }
+
+
   handleSubmit = (oneCartItem) => {
     const oneItem = this.state.products.filter(item => item.name === oneCartItem.product)[0]
-    const checkExist = this.state.cartItems.filter(item => item.product.name === oneItem.name)
+    const existingItem = this.state.cartItems.filter(item => item.product.name === oneItem.name)
     let qty = parseInt(oneCartItem.quantity)
     let price = oneItem.priceInCents
 
-    if(checkExist.length === 1) {
-      let mom = parseInt(checkExist[0].quantity, 10) + parseInt(oneCartItem.quantity, 10)
-      checkExist[0].quantity = mom
+    if(existingItem.length === 1) {
+      let totalPrice = parseInt(existingItem[0].quantity, 10) + parseInt(oneCartItem.quantity, 10)
+      existingItem[0].quantity = totalPrice
       this.setState({
         cartItems: this.state.cartItems,
         total: qty * price + this.state.total
@@ -80,7 +69,7 @@ class App extends Component {
           total={this.state.total}
         />
         <AddItem
-          products={products}
+          products={this.state.products}
           onSubmit={this.onSubmit}
           handleSubmit={this.handleSubmit}
         />
